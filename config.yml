@@ -1,0 +1,11 @@
+settings:
+  gametime: 60
+  pretime: 5
+  deathmatch: 30
+lobby:
+  world: world
+  x: 0.5
+  y: 1.0
+  z: 0.5
+  pitch: 0
+  yaw: 0

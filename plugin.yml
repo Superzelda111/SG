@@ -1,0 +1,17 @@
+name: SurvivalGames
+main: com.zanmc.survivalgames.SG
+version: 0.1-DEV
+author: Superzelda
+website: http://zanmc.com
+commands:
+  sg:
+  addspawn:
+  addmap:
+  vote:
+  editarena:
+  savearena:
+  fstart:
+  join:
+  leave:
+  setlobby:
+  tploc:

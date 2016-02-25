@@ -1,0 +1,38 @@
+package com.zanmc.survivalgames.commands;
+
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
+
+import com.zanmc.survivalgames.SettingsManager;
+import com.zanmc.survivalgames.handlers.Map;
+
+public class Addmap implements CommandExecutor {
+
+	@Override
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+
+		if (sender.hasPermission("sg.admin")) {
+			if (args.length == 0) {
+				sender.sendMessage(ChatColor.RED + "Usage: /addmap <filename> <name>");
+			} else {
+				FileConfiguration config = SettingsManager.getInstance().getData();
+				config.set(args[0] + ".name", args[1]);
+				config.set(args[0] + ".gracetime", 30);
+				config.set(args[0] + ".gametime", 60);
+				SettingsManager.getInstance().saveData();
+				Map map = new Map(args[1], args[0]);
+				sender.sendMessage("Map created: " + map.getMapName());
+			}
+
+		} else {
+			sender.sendMessage(ChatColor.RED + "No permission");
+			return true;
+		}
+
+		return false;
+	}
+
+}
