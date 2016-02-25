@@ -2,6 +2,7 @@ settings:
   gametime: 60
   pretime: 5
   deathmatch: 30
+  bungeecord: false
 lobby:
   world: world
   x: 0.5

@@ -2,21 +2,32 @@ package com.zanmc.survivalgames.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
+import com.zanmc.survivalgames.SG;
 import com.zanmc.survivalgames.handlers.Map;
 
 public class LocUtil {
 
-	private static Location spawnLocation = new Location(Bukkit.getWorld("lobby"), 0.5, 64, 0.5);
+	static FileConfiguration config = SG.config;
+	private static World world = Bukkit.getWorld(SG.pl.getConfig().getString("lobby.world"));
+	private static double x = config.getDouble("lobby.x");
+	private static double y = config.getDouble("lobby.y");
+	private static double z = config.getDouble("lobby.z");
+	private static float yaw = config.getInt("lobby.yaw");
+	private static float pitch = config.getInt("lobby.pitch");
 
-	public static void teleportToSpawn(Player p) {
+	private static Location spawnLocation = new Location(world, x, y, z, yaw, pitch);
+
+	public static void teleportToLobby(Player p) {
 		p.teleport(spawnLocation);
 	}
 
 	public static void teleportAllToSpawn() {
 		for (Player p : Bukkit.getOnlinePlayers()) {
-			teleportToSpawn(p);
+			teleportToLobby(p);
 		}
 	}
 

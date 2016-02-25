@@ -34,6 +34,7 @@ import com.zanmc.survivalgames.listeners.IngameListener;
 import com.zanmc.survivalgames.listeners.JoinListener;
 import com.zanmc.survivalgames.listeners.StartListener;
 import com.zanmc.survivalgames.utils.ChatUtil;
+import com.zanmc.survivalgames.utils.LocUtil;
 
 public class SG extends JavaPlugin {
 
@@ -43,7 +44,7 @@ public class SG extends JavaPlugin {
 	public static FileConfiguration data = SettingsManager.getInstance().getData();
 
 	public static int gamePID, PreGamePID;
-	public static int pretime, gametime,dmtime;
+	public static int pretime, gametime, dmtime;
 
 	public static SG pl;
 
@@ -55,7 +56,7 @@ public class SG extends JavaPlugin {
 		registerCommands();
 		registerPreEvents();
 		pretime = getConfig().getInt("settings.pretime") * 60;
-		dmtime = getConfig().getInt("settings.deathmatch")*60;
+		dmtime = getConfig().getInt("settings.deathmatch") * 60;
 
 		for (String maps : SettingsManager.getInstance().getData().getKeys(false)) {
 			ConfigurationSection each = SettingsManager.getInstance().getData().getConfigurationSection(maps);
@@ -130,15 +131,15 @@ public class SG extends JavaPlugin {
 	public static void unregisterStartEvents() {
 		HandlerList.unregisterAll(startListener);
 	}
-	
-	public static void registerGraceEvents(){
+
+	public static void registerGraceEvents() {
 		graceListener = new GraceListener();
 		Bukkit.getPluginManager().registerEvents(graceListener, SG.pl);
 	}
+
 	public static void unregisterGraceEvents() {
 		HandlerList.unregisterAll(graceListener);
 	}
-	
 
 	private void configs() {
 		config = getConfig();
@@ -208,13 +209,13 @@ public class SG extends JavaPlugin {
 					unregisterGraceEvents();
 					ChatUtil.broadcast("&6Grace period is over! &lFight&r&6!");
 				}
-				if (gametime == (dmtime/60-10) * 60) {
+				if (gametime == (dmtime / 60 - 10) * 60) {
 					ChatUtil.broadcast("&cDeathmatch in &4&l10 &cminutes.");
 				}
-				if (gametime == (dmtime/60-5) * 60) {
+				if (gametime == (dmtime / 60 - 5) * 60) {
 					ChatUtil.broadcast("&cDeathmatch in &4&l5 &cminutes.");
 				}
-				if (gametime >= (dmtime-10) && gametime < dmtime) {
+				if (gametime >= (dmtime - 10) && gametime < dmtime) {
 					ChatUtil.broadcast("&cDeathmatch in &4&l" + dmcountdown + " &cseconds.");
 					dmcountdown--;
 				}
@@ -241,9 +242,12 @@ public class SG extends JavaPlugin {
 			p.removePotionEffect(pe.getType());
 	}
 
-	public static void win() {
-		
-		
+	public static void win(Player p) {
+
+		ChatUtil.broadcast("&6&l" + p.getName() + "&r won the SurvivalGames!");
+		for (Gamer g : Gamer.getGamers()) {
+			LocUtil.teleportToLobby(g.getPlayer());
+		}
 	}
 
 }
