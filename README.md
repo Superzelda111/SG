@@ -19,3 +19,4 @@ Setting up this plugin is quite simple. All you need is the plugin itself, some 
 6. Do any other changes to the map if wanted, and finally type /savearena <filename>.  
 7. Teleport to the location of your lobby by writing /tploc <world> <x> <y> <z>  
 8. Set lobby with /setlobby.  
+9. Reload the server. This is considered save if no game is currently running. NEVER reload during a game. the plugin will glitch at the current state. Will be dealt with later.
