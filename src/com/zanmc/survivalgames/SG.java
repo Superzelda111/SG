@@ -44,8 +44,8 @@ public class SG extends JavaPlugin {
 	public static FileConfiguration config;
 	public static FileConfiguration data = SettingsManager.getInstance().getData();
 
-	public static int gamePID, PreGamePID,DMPID;
-	public static int pretime, gametime, dmtime;
+	public static int gamePID, PreGamePID, DMPID;
+	public static int pretime, gametime, dmtime, dm;
 
 	public static SG pl;
 
@@ -214,8 +214,12 @@ public class SG extends JavaPlugin {
 				if (gametime == (dmtime / 60 - 5) * 60) {
 					ChatUtil.broadcast("&cDeathmatch in &4&l5 &cminutes.");
 				}
-				if(gametime >= (dmtime - 15) && gametime < dmtime){
+				if (gametime == (dmtime / 60 - 1) * 60) {
+					ChatUtil.broadcast("&cDeathmatch in &4&l1 &cminute.");
+				}
+				if (gametime == dmtime - 30) {
 					ChatUtil.broadcast("&cTeleporting players to deathmatch. Waiting for players to load world.");
+					registerStartEvents();
 					int i = 0;
 					for (Gamer pla : Gamer.getAliveGamers()) {
 						if (i >= 24)
@@ -226,12 +230,12 @@ public class SG extends JavaPlugin {
 						p.setGameMode(GameMode.ADVENTURE);
 					}
 				}
-				
+
 				if (gametime >= (dmtime - 10) && gametime < dmtime) {
 					ChatUtil.broadcast("&cDeathmatch in &4&l" + dmcountdown + " &cseconds.");
 					dmcountdown--;
 				}
-				if(gametime == dmtime){
+				if (gametime == dmtime) {
 					Deathmatch();
 				}
 
@@ -242,17 +246,35 @@ public class SG extends JavaPlugin {
 	}
 
 	private static void Deathmatch() {
+		unregisterStartEvents();
+		registerGameEvents();
 		startDeathmatchTimer();
 	}
-	
-	private static void startDeathmatchTimer(){
-		DMPID = Bukkit.getScheduler().scheduleSyncRepeatingTask(SG.pl, new Runnable(){
-			
+
+	private static void startDeathmatchTimer() {
+		DMPID = Bukkit.getScheduler().scheduleSyncRepeatingTask(SG.pl, new Runnable() {
+
 			@Override
-			public void run(){
-				if(dmtime == 0){
+			public void run() {
+				if (dm == 0) {
 					ChatUtil.broadcast("&cGame will end in &4&l5 &r&cminutes!");
 				}
+				if (dm == 2 * 60) {
+					ChatUtil.broadcast("&cGame will end in &4&l3 &r&cminutes!");
+				}
+				if (dm == 4 * 60) {
+					ChatUtil.broadcast("&cGame will end in &4&l1 &r&cminute!");
+				}
+				if (dm == 5 * 60) {
+					ChatUtil.broadcast("&cEnding game. No win due to multiple players left.");
+				}
+				if (dm == (5 * 60) + 5) {
+					for (Player p : Bukkit.getOnlinePlayers()) {
+						p.kickPlayer(ChatColor.translateAlternateColorCodes('&', "&cServer restarting"));
+					}
+					Bukkit.getServer().shutdown();
+				}
+				dm++;
 			}
 		}, 0, 20);
 	}
@@ -276,9 +298,10 @@ public class SG extends JavaPlugin {
 	public static void win(Player p) {
 
 		ChatUtil.broadcast("&6&l" + p.getName() + "&r won the SurvivalGames!");
-		for (Gamer g : Gamer.getGamers()) {
-			LocUtil.teleportToLobby(g.getPlayer());
+		for (Player pl : Bukkit.getOnlinePlayers()) {
+			pl.kickPlayer(ChatColor.translateAlternateColorCodes('&', "&6&l"+p.getName() + " &r&6won!\n&cServer restarting."));
 		}
+		Bukkit.getServer().shutdown();
 	}
 
 }

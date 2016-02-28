@@ -44,9 +44,11 @@ public class Game {
 			
 			int i = 0;
 			for (Gamer pla : Gamer.getGamers()) {
+				pla.setAlive(true);
 				if (i >= 24)
 					i = 0;
 				Player p = pla.getPlayer();
+				SG.clearPlayer(p);
 				System.out.println("Players: " + pla.getName());
 				LocUtil.teleportToGame(p, i);
 				p.setGameMode(GameMode.ADVENTURE);
