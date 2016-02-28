@@ -28,24 +28,36 @@ public class Game {
 	}
 
 	public static void start() {
-		Bukkit.getScheduler().cancelTask(SG.PreGamePID);
-		SG.unRegisterPreEvents();
-		SG.registerStartEvents();
-		Map.setActiveMap(VoteHandler.getWithMostVotes());
-		System.out.println("Active Map: " + Map.getActiveMap().getMapName());
-		hasStarted = true;
-		GameState.setState(GameState.INGAME);
-		int i = 0;
-		for (Gamer pla : Gamer.getGamers()) {
-			if (i >= 24)
-				i = 0;
-			Player p = pla.getPlayer();
-			System.out.println("Players: " + pla.getName());
-			LocUtil.teleportToGame(p, i);
-			p.setGameMode(GameMode.ADVENTURE);
-			ChatUtil.sendMessage(p, "The game has started! You have been given the ability: "); // TODO:
-																								// Abilities
-			SG.startGameTimer();
+		if (Gamer.getGamers().size() > 0) {
+			Bukkit.getScheduler().cancelTask(SG.PreGamePID);
+			SG.unRegisterPreEvents();
+			SG.registerStartEvents();
+			Map.setActiveMap(VoteHandler.getWithMostVotes());
+			System.out.println("Active Map: " + Map.getActiveMap().getMapName());
+			hasStarted = true;
+			GameState.setState(GameState.INGAME);
+			
+			ChestHandler.fillAllChests(Map.getActiveMap().getFileName());
+			System.out.println("Filled chests with fun loot!");
+			
+			Bukkit.getWorld(Map.getActiveMap().getFileName()).setTime(0);
+			
+			int i = 0;
+			for (Gamer pla : Gamer.getGamers()) {
+				if (i >= 24)
+					i = 0;
+				Player p = pla.getPlayer();
+				System.out.println("Players: " + pla.getName());
+				LocUtil.teleportToGame(p, i);
+				p.setGameMode(GameMode.ADVENTURE);
+				ChatUtil.sendMessage(p, "The game has started! You have been given the ability: "); // TODO:
+																									// Abilities
+				SG.startGameTimer();
+			}
+		} else {
+			ChatUtil.broadcast("Not enough players to start game!");
+			Bukkit.getScheduler().cancelTask(SG.PreGamePID);
+			SG.startPreGameCountdown();
 		}
 
 		/*

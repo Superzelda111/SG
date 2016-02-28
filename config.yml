@@ -3,6 +3,7 @@ settings:
   pretime: 5
   deathmatch: 30
   bungeecord: false
+  rewriteconfig: false
 lobby:
   world: world
   x: 0.5
@@ -10,3 +11,10 @@ lobby:
   z: 0.5
   pitch: 0
   yaw: 0
+chests:
+  contents: 
+  - APPLE,3
+  - IRON_SWORD,1
+  - STONE_AXE,1
+  - COOKED_BEEF,3
+  - DIAMOND,1

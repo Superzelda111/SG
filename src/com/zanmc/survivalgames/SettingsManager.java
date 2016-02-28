@@ -22,14 +22,13 @@ public class SettingsManager {
    
     Plugin p;
    
-    FileConfiguration data;
-    File dfile;
-    
-    FileConfiguration chests;
+    FileConfiguration config;
     File cfile;
    
+    FileConfiguration data;
+    File dfile;
+   
     public void setup(Plugin p) {
-           
             if (!p.getDataFolder().exists()) {
                     p.getDataFolder().mkdir();
             }
@@ -45,29 +44,12 @@ public class SettingsManager {
                     }
             }
            
-            chests = YamlConfiguration.loadConfiguration(cfile);
-            
-            cfile = new File(p.getDataFolder(), "chests.yml");
-            
-            if (!cfile.exists()) {
-                    try {
-                            cfile.createNewFile();
-                    }
-                    catch (IOException e) {
-                            Bukkit.getServer().getLogger().severe(ChatColor.RED + "Could not create data.yml!");
-                    }
-            }
-           
-            chests = YamlConfiguration.loadConfiguration(cfile);
+            data = YamlConfiguration.loadConfiguration(dfile);
     }
    
     public FileConfiguration getData() {
             return data;
     }
-    
-    public FileConfiguration getChests() {
-        return chests;
-}
    
     public void saveData() {
             try {
@@ -77,23 +59,10 @@ public class SettingsManager {
                     Bukkit.getServer().getLogger().severe(ChatColor.RED + "Could not save data.yml!");
             }
     }
-    
-    public void saveChests() {
-        try {
-                chests.save(cfile);
-        }
-        catch (IOException e) {
-                Bukkit.getServer().getLogger().severe(ChatColor.RED + "Could not save chests.yml!");
-        }
-}
    
     public void reloadData() {
             data = YamlConfiguration.loadConfiguration(dfile);
     }
-    
-    public void reloadChests() {
-        chests = YamlConfiguration.loadConfiguration(cfile);
-}
    
     public PluginDescriptionFile getDesc() {
             return p.getDescription();

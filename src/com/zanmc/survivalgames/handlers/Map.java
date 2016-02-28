@@ -26,7 +26,6 @@ public class Map {
 		this.fileName = fileName;
 		this.MapName = mapName;
 		allMaps.add(this);
-		GenerationHandler.generateChunks(fileName);
 	}
 
 	public static void addMap(Map map) {

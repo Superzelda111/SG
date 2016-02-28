@@ -5,6 +5,7 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.configuration.ConfigurationSection;
@@ -43,7 +44,7 @@ public class SG extends JavaPlugin {
 	public static FileConfiguration config;
 	public static FileConfiguration data = SettingsManager.getInstance().getData();
 
-	public static int gamePID, PreGamePID;
+	public static int gamePID, PreGamePID,DMPID;
 	public static int pretime, gametime, dmtime;
 
 	public static SG pl;
@@ -57,10 +58,12 @@ public class SG extends JavaPlugin {
 		registerPreEvents();
 		pretime = getConfig().getInt("settings.pretime") * 60;
 		dmtime = getConfig().getInt("settings.deathmatch") * 60;
+		FileConfiguration data = SettingsManager.getInstance().getData();
 
-		for (String maps : SettingsManager.getInstance().getData().getKeys(false)) {
-			ConfigurationSection each = SettingsManager.getInstance().getData().getConfigurationSection(maps);
+		for (String maps : data.getKeys(false)) {
+			ConfigurationSection each = data.getConfigurationSection(maps);
 			Map map = new Map(each.getString("name"), maps);
+			System.out.println("Registered maps:");
 			System.out.println(map.getMapName());
 			WorldCreator worldc = new WorldCreator(map.getFileName());
 			World world = worldc.createWorld();
@@ -84,10 +87,6 @@ public class SG extends JavaPlugin {
 			}
 			Map.setVoteMaps();
 		}
-
-		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "/gamerule doMobSpawning false");
-		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "/gamerule doDaylightCycle true");
-		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "/difficulty 0");
 
 		startPreGameCountdown();
 	}
@@ -151,7 +150,7 @@ public class SG extends JavaPlugin {
 		}
 	}
 
-	private void startPreGameCountdown() {
+	public static void startPreGameCountdown() {
 		PreGamePID = Bukkit.getScheduler().scheduleSyncRepeatingTask(SG.pl, new Runnable() {
 
 			@Override
@@ -215,14 +214,46 @@ public class SG extends JavaPlugin {
 				if (gametime == (dmtime / 60 - 5) * 60) {
 					ChatUtil.broadcast("&cDeathmatch in &4&l5 &cminutes.");
 				}
+				if(gametime >= (dmtime - 15) && gametime < dmtime){
+					ChatUtil.broadcast("&cTeleporting players to deathmatch. Waiting for players to load world.");
+					int i = 0;
+					for (Gamer pla : Gamer.getAliveGamers()) {
+						if (i >= 24)
+							i = 0;
+						Player p = pla.getPlayer();
+						System.out.println("Players: " + pla.getName());
+						LocUtil.teleportToGame(p, i);
+						p.setGameMode(GameMode.ADVENTURE);
+					}
+				}
+				
 				if (gametime >= (dmtime - 10) && gametime < dmtime) {
 					ChatUtil.broadcast("&cDeathmatch in &4&l" + dmcountdown + " &cseconds.");
 					dmcountdown--;
+				}
+				if(gametime == dmtime){
+					Deathmatch();
 				}
 
 				gametime++;
 			}
 
+		}, 0, 20);
+	}
+
+	private static void Deathmatch() {
+		startDeathmatchTimer();
+	}
+	
+	private static void startDeathmatchTimer(){
+		DMPID = Bukkit.getScheduler().scheduleSyncRepeatingTask(SG.pl, new Runnable(){
+			
+			@Override
+			public void run(){
+				if(dmtime == 0){
+					ChatUtil.broadcast("&cGame will end in &4&l5 &r&cminutes!");
+				}
+			}
 		}, 0, 20);
 	}
 

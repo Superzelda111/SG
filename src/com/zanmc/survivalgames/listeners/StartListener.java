@@ -9,19 +9,20 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 public class StartListener implements Listener {
-	
-	
+
 	@EventHandler
-	public void onMove(PlayerMoveEvent e){
+	public void onMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
-		Location loc = new Location(p.getWorld(),p.getLocation().getX(),p.getLocation().getY(),p.getLocation().getZ());
-		p.teleport(loc);
-		
+		if (e.getFrom().getBlockX() != e.getTo().getBlockX() || e.getFrom().getBlockZ() != e.getTo().getBlockZ()) {
+
+			Location loc = new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY(),
+					p.getLocation().getZ());
+			p.teleport(loc);
+		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onCreatureSpawn(CreatureSpawnEvent event) {
 		event.setCancelled(true);
 	}
-
 }

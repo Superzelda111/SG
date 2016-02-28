@@ -1,4 +1,57 @@
 package com.zanmc.survivalgames.handlers;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import org.bukkit.Chunk;
+import org.bukkit.Material;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Chest;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+
+import com.zanmc.survivalgames.SG;
+
 public class ChestHandler {
+
+	static FileConfiguration data = SG.config;
+	static List<String> contents = data.getStringList("chests.contents");
+	static List<ItemStack> items = new ArrayList<ItemStack>();
+
+	private static void addItemsToList() {
+		for (String con : contents) {
+			String[] ncon = con.split(",");
+			ItemStack is = new ItemStack(Material.valueOf(ncon[0]), Integer.valueOf(ncon[1]));
+			items.add(is);
+		}
+	}
+
+	public static void fillAllChests(String world) {
+		addItemsToList();
+		for (Chunk chunk : SG.pl.getServer().getWorld(world).getLoadedChunks()) {
+			for (BlockState entities : chunk.getTileEntities()) {
+				if (entities instanceof Chest) {
+					Inventory inv = ((Chest) entities).getInventory();
+					fillChests(inv);
+				}
+			}
+		}
+	}
+
+	private static void fillChests(Inventory inv) {
+		inv.clear();
+		int low = 2;
+		int high = 7;
+		Random rnd = new Random();
+
+		for (int i = 0; i < rnd.nextInt(high - low) + low; i++) {
+			if (inv.contains(items.get(rnd.nextInt(items.size()))))
+				continue;
+			inv.setItem(rnd.nextInt(27), items.get(rnd.nextInt(items.size())));
+		}
+
+	}
+
 }
