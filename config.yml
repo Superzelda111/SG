@@ -18,3 +18,7 @@ chests:
   - STONE_AXE,1
   - COOKED_BEEF,3
   - DIAMOND,1
+points:
+  win: 100
+  lose: 20
+  kill: 10

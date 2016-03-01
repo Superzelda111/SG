@@ -19,9 +19,9 @@ public class Addmap implements CommandExecutor {
 				sender.sendMessage(ChatColor.RED + "Usage: /addmap <filename> <name>");
 			} else {
 				FileConfiguration config = SettingsManager.getInstance().getData();
-				config.set(args[0] + ".name", args[1]);
-				config.set(args[0] + ".gracetime", 30);
-				config.set(args[0] + ".gametime", 60);
+				config.set("arenas." + args[0] + ".name", args[1]);
+				config.set("arenas." + args[0] + ".gracetime", 30);
+				config.set("arenas." + args[0] + ".gametime", 60);
 				SettingsManager.getInstance().saveData();
 				Map map = new Map(args[1], args[0]);
 				sender.sendMessage("Map created: " + map.getMapName());

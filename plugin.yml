@@ -6,12 +6,19 @@ website: http://zanmc.com
 commands:
   sg:
   addspawn:
+    permission: sg.admin
   addmap:
+    permission: sg.admin
   vote:
   editarena:
+    permission: sg.admin
   savearena:
+    permission: sg.admin
   fstart:
+    permission: sg.admin
   join:
   leave:
   setlobby:
+    permission: sg.admin
   tploc:
+    permission: sg.admin

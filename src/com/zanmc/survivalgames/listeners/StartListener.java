@@ -7,18 +7,23 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.server.ServerListPingEvent;
 
 public class StartListener implements Listener {
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onMove(PlayerMoveEvent e) {
-		Player p = e.getPlayer();
-		if (e.getFrom().getBlockX() != e.getTo().getBlockX() || e.getFrom().getBlockZ() != e.getTo().getBlockZ()) {
+		Player player = e.getPlayer();
+		Location from = e.getFrom();
 
-			Location loc = new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY(),
-					p.getLocation().getZ());
-			p.teleport(loc);
+		if (from.getZ() != e.getTo().getZ() && from.getX() != e.getTo().getX()) {
+			player.teleport(e.getFrom());
 		}
+	}
+
+	@EventHandler
+	public void onMOTD(ServerListPingEvent e) {
+		e.setMotd("Starting\nVIP-JOIN");
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)

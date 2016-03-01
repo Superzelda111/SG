@@ -6,7 +6,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -23,11 +22,12 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.server.ServerListPingEvent;
 
 import com.zanmc.survivalgames.SG;
 import com.zanmc.survivalgames.handlers.Gamer;
 import com.zanmc.survivalgames.handlers.Map;
-import com.zanmc.survivalgames.handlers.Title;
+import com.zanmc.survivalgames.handlers.PointSystem;
 import com.zanmc.survivalgames.handlers.VoteHandler;
 
 public class JoinListener implements Listener {
@@ -82,7 +82,22 @@ public class JoinListener implements Listener {
 					+ " tributes waiting to play.");
 		}
 
-		new Title(((CraftPlayer) p).getHandle(), "&6Welcome to SG!", "&aDo &f/vote &ato vote for your map!", 20, 40, 20);
+		// new Title(((CraftPlayer) p).getHandle(), "&6Welcome to SG!", "&aDo
+		// &f/vote &ato vote for your map!", 20, 40,
+		// 20);
+
+		if (!PointSystem.hasPoints(p.getUniqueId().toString())) {
+			System.out.println("Set points for player");
+			PointSystem.setPoints(p.getUniqueId().toString(), 0);
+		} else {
+			System.out.println("Player already exists");
+		}
+
+	}
+
+	@EventHandler
+	public void onMOTD(ServerListPingEvent e) {
+		e.setMotd("Lobby\nJoin");
 	}
 
 	@EventHandler

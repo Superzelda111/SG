@@ -23,18 +23,14 @@ public class VoteHandler {
 		return votes.get(p);
 	}
 	
-	public static int getVotesMap(Map map)
-	{
+	public static int getVotesMap(Map map) {
 		int out = 0;
-		for(String pl : votes.keySet())
-		{
+		for(String pl : votes.keySet()) {
 			Map vote = votes.get(pl);
-			if(vote == map)
-			{
+			if(vote == map) {
 				out++;
 			}
 		}
-		
 		return out;
 	}
 

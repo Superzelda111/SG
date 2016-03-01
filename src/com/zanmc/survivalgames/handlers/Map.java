@@ -13,7 +13,7 @@ import com.zanmc.survivalgames.SettingsManager;
 
 public class Map {
 
-	FileConfiguration data =SettingsManager.getInstance().getData();
+	FileConfiguration data = SettingsManager.getInstance().getData();
 
 	private static Map activeMap = null;
 	private static List<Map> voteMaps = new ArrayList<Map>();
@@ -67,8 +67,8 @@ public class Map {
 	public static Map getActiveMap() {
 		return activeMap;
 	}
-	
-	public static Map getMapById(int id){
+
+	public static Map getMapById(int id) {
 		return voteMaps.get(id);
 	}
 
@@ -87,9 +87,9 @@ public class Map {
 	public Location getSpawn(int id) {
 		System.out.println(Map.getActiveMap().getFileName());
 		World world = Bukkit.getWorld(Map.getActiveMap().getFileName());
-		double x = data.getDouble(Map.getActiveMap().getFileName() + ".spawns." + id + ".x");
-		double y = data.getDouble(Map.getActiveMap().getFileName() + ".spawns." + id + ".y");
-		double z = data.getDouble(Map.getActiveMap().getFileName() + ".spawns." + id + ".z");
+		double x = data.getDouble("arenas." + Map.getActiveMap().getFileName() + ".spawns." + id + ".x");
+		double y = data.getDouble("arenas." + Map.getActiveMap().getFileName() + ".spawns." + id + ".y");
+		double z = data.getDouble("arenas." + Map.getActiveMap().getFileName() + ".spawns." + id + ".z");
 		return new Location(world, x, y, z);
 	}
 }

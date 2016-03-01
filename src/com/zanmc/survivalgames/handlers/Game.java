@@ -49,13 +49,14 @@ public class Game {
 					i = 0;
 				Player p = pla.getPlayer();
 				SG.clearPlayer(p);
-				System.out.println("Players: " + pla.getName());
 				LocUtil.teleportToGame(p, i);
 				p.setGameMode(GameMode.ADVENTURE);
 				ChatUtil.sendMessage(p, "The game has started! You have been given the ability: "); // TODO:
 																									// Abilities
-				SG.startGameTimer();
+				i++;
 			}
+			SG.startGameTimer();
+			System.out.println("Players: "+Gamer.getGamers().toString());
 		} else {
 			ChatUtil.broadcast("Not enough players to start game!");
 			Bukkit.getScheduler().cancelTask(SG.PreGamePID);

@@ -9,14 +9,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_9_R1.CraftWorld;
 import org.bukkit.entity.Player;
 
 import com.zanmc.survivalgames.SG;
 import com.zanmc.survivalgames.utils.DataPair;
 
-import net.minecraft.server.v1_8_R3.ChunkProviderServer;
-import net.minecraft.server.v1_8_R3.WorldServer;
+import net.minecraft.server.v1_9_R1.ChunkProviderServer;
+import net.minecraft.server.v1_9_R1.WorldServer;
 
 public class GenerationHandler {
 	
@@ -73,11 +73,11 @@ public class GenerationHandler {
 							if (!world.isChunkLoaded(pair.getX(), pair.getZ())) {
 								world.loadChunk(pair.getX(), pair.getZ());
 								nmsWorld = ((CraftWorld) world).getHandle();
-								nmsChunkProviderServer = nmsWorld.chunkProviderServer;
+								nmsChunkProviderServer = nmsWorld.getChunkProviderServer();
 								for (cx = pair.getX() - 1; cx <= pair.getX() + 1; cx++)
 									for (int cz = pair.getZ() - 1; cz <= pair.getZ() + 1; cz++)
 										nmsChunkProviderServer.getChunkAt(cx, cz);
-								nmsChunkProviderServer.getChunkAt(nmsChunkProviderServer, pair.getX(), pair.getZ());
+								nmsChunkProviderServer.getChunkAt(pair.getX(), pair.getZ());
 
 								world.unloadChunk(pair.getX(), pair.getZ());
 							}
@@ -86,10 +86,6 @@ public class GenerationHandler {
 						}
 						if (!cordsItel.hasNext()) {
 							System.out.println("World is done generating");
-							try {
-								Bukkit.getPluginManager().disablePlugin(Bukkit.getPluginManager().getPlugin("TerrainControl"));
-							} catch (Exception e) {
-							}
 							for (Player op : Bukkit.getOnlinePlayers())
 								if (op.isOp())
 									op.sendMessage(ChatColor.RED + "[NubesHG] The chunks are done generating.");

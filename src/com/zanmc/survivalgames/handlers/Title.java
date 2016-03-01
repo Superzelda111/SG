@@ -1,10 +1,11 @@
 package com.zanmc.survivalgames.handlers;
 
-import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
-import net.md_5.bungee.api.ChatColor;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
-import net.minecraft.server.v1_8_R3.PacketPlayOutTitle.EnumTitleAction;
+import org.bukkit.ChatColor;
+
+import net.minecraft.server.v1_9_R1.EntityPlayer;
+import net.minecraft.server.v1_9_R1.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_9_R1.PacketPlayOutTitle;
+import net.minecraft.server.v1_9_R1.PacketPlayOutTitle.EnumTitleAction;
 
 public class Title {
 

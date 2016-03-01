@@ -23,11 +23,12 @@ public class Addspawn implements CommandExecutor {
 				p.sendMessage(ChatColor.RED + "Usage: /addspawn <filename> <index>");
 			} else {
 				FileConfiguration data = SettingsManager.getInstance().getData();
-				data.set(args[0] + ".spawns." + args[1] + ".x", p.getLocation().getX());
-				data.set(args[0] + ".spawns." + args[1] + ".y", p.getLocation().getY());
-				data.set(args[0] + ".spawns." + args[1] + ".z", p.getLocation().getZ());
+				data.set("arenas." + args[0] + ".spawns." + args[1] + ".x", p.getLocation().getX());
+				data.set("arenas." + args[0] + ".spawns." + args[1] + ".y", p.getLocation().getY());
+				data.set("arenas." + args[0] + ".spawns." + args[1] + ".z", p.getLocation().getZ());
 				SettingsManager.getInstance().saveData();
-				p.sendMessage("Spawn '"+args[1]+"' set at "+p.getLocation().getX()+" "+p.getLocation().getY()+ " " + p.getLocation().getZ());
+				p.sendMessage("Spawn '" + args[1] + "' set at " + p.getLocation().getX() + " " + p.getLocation().getY()
+						+ " " + p.getLocation().getZ());
 			}
 
 		} else {
