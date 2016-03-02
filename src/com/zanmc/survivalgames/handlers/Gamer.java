@@ -15,15 +15,21 @@ public class Gamer {
 	private String name;
 	private UUID uuid;
 	private boolean alive = false;
+	private int points;
 
 	private Gamer(Player player) {
 		this.name = player.getName();
 		this.uuid = player.getUniqueId();
+		this.points = PointSystem.getPoints(player);
 		gamers.add(this);
 	}
 
 	public Player getPlayer() {
 		return Bukkit.getPlayer(uuid);
+	}
+	
+	public int getPoints(){
+		return points;
 	}
 
 	public String getName() {

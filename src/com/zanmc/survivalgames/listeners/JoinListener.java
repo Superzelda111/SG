@@ -86,6 +86,7 @@ public class JoinListener implements Listener {
 		// &f/vote &ato vote for your map!", 20, 40,
 		// 20);
 
+		PointSystem.load(p);
 		if (!PointSystem.hasPoints(p.getUniqueId().toString())) {
 			System.out.println("Set points for player");
 			PointSystem.setPoints(p.getUniqueId().toString(), 0);

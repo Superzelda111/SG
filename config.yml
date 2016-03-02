@@ -4,6 +4,8 @@ settings:
   deathmatch: 30
   bungeecord: false
   rewriteconfig: false
+  chat:
+    format: '<&a[&b%points&a]&r%name> %msg'
 lobby:
   world: world
   x: 0.5

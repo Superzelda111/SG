@@ -1,5 +1,7 @@
 package com.zanmc.survivalgames.handlers;
 
+import java.util.ArrayList;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -7,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import com.zanmc.survivalgames.GameState;
 import com.zanmc.survivalgames.SG;
+import com.zanmc.survivalgames.events.GameStartEvent;
 import com.zanmc.survivalgames.utils.ChatUtil;
 import com.zanmc.survivalgames.utils.LocUtil;
 
@@ -28,6 +31,7 @@ public class Game {
 	}
 
 	public static void start() {
+		ArrayList<Player> participants = new ArrayList<Player>();
 		if (Gamer.getGamers().size() > 0) {
 			Bukkit.getScheduler().cancelTask(SG.PreGamePID);
 			SG.unRegisterPreEvents();
@@ -36,12 +40,12 @@ public class Game {
 			System.out.println("Active Map: " + Map.getActiveMap().getMapName());
 			hasStarted = true;
 			GameState.setState(GameState.INGAME);
-			
+
 			ChestHandler.fillAllChests(Map.getActiveMap().getFileName());
 			System.out.println("Filled chests with fun loot!");
-			
+
 			Bukkit.getWorld(Map.getActiveMap().getFileName()).setTime(0);
-			
+
 			int i = 0;
 			for (Gamer pla : Gamer.getGamers()) {
 				pla.setAlive(true);
@@ -49,6 +53,7 @@ public class Game {
 					i = 0;
 				Player p = pla.getPlayer();
 				SG.clearPlayer(p);
+				participants.add(p);
 				LocUtil.teleportToGame(p, i);
 				p.setGameMode(GameMode.ADVENTURE);
 				ChatUtil.sendMessage(p, "The game has started! You have been given the ability: "); // TODO:
@@ -56,7 +61,8 @@ public class Game {
 				i++;
 			}
 			SG.startGameTimer();
-			System.out.println("Players: "+Gamer.getGamers().toString());
+			System.out.println("Players: " + Gamer.getGamers().toString());
+			Bukkit.getPluginManager().callEvent(new GameStartEvent(participants));
 		} else {
 			ChatUtil.broadcast("Not enough players to start game!");
 			Bukkit.getScheduler().cancelTask(SG.PreGamePID);

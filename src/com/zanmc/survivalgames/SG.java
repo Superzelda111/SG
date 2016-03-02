@@ -8,7 +8,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -68,8 +67,7 @@ public class SG extends JavaPlugin {
 		} else {
 
 			for (String maps : data.getConfigurationSection("arenas").getKeys(false)) {
-				ConfigurationSection each = data.getConfigurationSection(maps);
-				Map map = new Map(each.getString("name"), maps);
+				Map map = new Map(data.getString("arenas." + maps + ".name"), maps);
 				System.out.println("Registered maps:");
 				System.out.println(map.getMapName());
 				WorldCreator worldc = new WorldCreator(map.getFileName());
@@ -95,14 +93,20 @@ public class SG extends JavaPlugin {
 				Map.setVoteMaps();
 			}
 		}
-
-		PointSystem.load();
 		startPreGameCountdown();
 	}
-	
+
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onDisable() {
-		PointSystem.save();
+		Bukkit.getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {
+
+			@Override
+			public void run() {
+				PointSystem.save();
+			}
+
+		}, 1L);
 	}
 
 	private void registerCommands() {
