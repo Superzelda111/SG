@@ -15,8 +15,8 @@ public class Addmap implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
 		if (sender.hasPermission("sg.admin")) {
-			if (args.length == 0) {
-				sender.sendMessage(ChatColor.RED + "Usage: /addmap <filename> <name>");
+			if (args.length != 2) {
+				sender.sendMessage(ChatColor.RED + "Usage: /addarena <filename> <name>");
 			} else {
 				FileConfiguration config = SettingsManager.getInstance().getData();
 				config.set("arenas." + args[0] + ".name", args[1]);

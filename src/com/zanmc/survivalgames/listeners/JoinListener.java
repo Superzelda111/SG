@@ -42,6 +42,7 @@ public class JoinListener implements Listener {
 	public void onQuit(PlayerQuitEvent event) {
 		Gamer g = Gamer.getGamer(event.getPlayer());
 		g.remove();
+		PointSystem.save(event.getPlayer());
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
@@ -65,7 +66,10 @@ public class JoinListener implements Listener {
 
 		SG.clearPlayer(p);
 		p.setGameMode(GameMode.SURVIVAL);
-
+		if (!PointSystem.load(p)) {
+			System.out.println("Set points for player");
+			PointSystem.setPoints(p, 0);
+		}
 		if (p.hasPermission("sg.admin")) {
 			p.sendMessage("Joined as admin. Type /join to join the game");
 		} else {
@@ -85,14 +89,6 @@ public class JoinListener implements Listener {
 		// new Title(((CraftPlayer) p).getHandle(), "&6Welcome to SG!", "&aDo
 		// &f/vote &ato vote for your map!", 20, 40,
 		// 20);
-
-		PointSystem.load(p);
-		if (!PointSystem.hasPoints(p.getUniqueId().toString())) {
-			System.out.println("Set points for player");
-			PointSystem.setPoints(p.getUniqueId().toString(), 0);
-		} else {
-			System.out.println("Player already exists");
-		}
 
 	}
 

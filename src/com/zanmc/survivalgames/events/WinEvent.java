@@ -20,19 +20,12 @@ public class WinEvent extends Event {
 	}
 
 	private Player player;
-	private int points;
 
 	public WinEvent(Gamer gamer) {
 		this.player = gamer.getPlayer();
-		this.points = gamer.getPoints();
 	}
 
 	public Player getPlayer() {
 		return player;
 	}
-
-	public int getPoints() {
-		return points;
-	}
-
 }

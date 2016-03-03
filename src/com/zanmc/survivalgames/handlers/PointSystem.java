@@ -32,22 +32,22 @@ public class PointSystem {
 		return true;
 	}
 
-	public static void setPoints(String uuid, int amount) {
-		points.put(uuid, amount);
+	public static void setPoints(Player p, int amount) {
+		points.put(p.getUniqueId().toString(), amount);
 	}
 
-	public static void save() {
-		for (String uuid : points.keySet()) {
-			SG.data.set("users." + uuid + ".points", points.get(uuid));
-		}
+	public static void save(Player p) {
+		SG.data.set("users." + p.getUniqueId().toString() + ".points", points.get(p.getUniqueId().toString()));
 		SettingsManager.getInstance().saveData();
 	}
 
-	public static void load(Player p) {
+	public static boolean load(Player p) {
 		if (SG.data.getString("users." + p.getUniqueId().toString() + ".points") != null) {
 			points.put(p.getUniqueId().toString(), SG.data.getInt("users." + p.getUniqueId().toString() + ".points"));
+			return true;
 		} else {
 			System.out.println("User does not exist in database.");
+			return false;
 		}
 
 	}

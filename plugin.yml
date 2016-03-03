@@ -7,7 +7,7 @@ commands:
   sg:
   addspawn:
     permission: sg.admin
-  addmap:
+  addarena:
     permission: sg.admin
   vote:
   editarena:
@@ -22,3 +22,4 @@ commands:
     permission: sg.admin
   tploc:
     permission: sg.admin
+  points:

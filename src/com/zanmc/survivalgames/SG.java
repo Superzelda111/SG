@@ -23,6 +23,8 @@ import com.zanmc.survivalgames.commands.ForceStart;
 import com.zanmc.survivalgames.commands.Join;
 import com.zanmc.survivalgames.commands.Leave;
 import com.zanmc.survivalgames.commands.Lobby;
+import com.zanmc.survivalgames.commands.Points;
+import com.zanmc.survivalgames.commands.SGCommand;
 import com.zanmc.survivalgames.commands.TPLoc;
 import com.zanmc.survivalgames.commands.Vote;
 import com.zanmc.survivalgames.handlers.ChatHandler;
@@ -65,7 +67,6 @@ public class SG extends JavaPlugin {
 		if (data.getConfigurationSection("arenas") == null) {
 			System.out.println("No arenas created!");
 		} else {
-
 			for (String maps : data.getConfigurationSection("arenas").getKeys(false)) {
 				Map map = new Map(data.getString("arenas." + maps + ".name"), maps);
 				System.out.println("Registered maps:");
@@ -96,21 +97,8 @@ public class SG extends JavaPlugin {
 		startPreGameCountdown();
 	}
 
-	@SuppressWarnings("deprecation")
-	@Override
-	public void onDisable() {
-		Bukkit.getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {
-
-			@Override
-			public void run() {
-				PointSystem.save();
-			}
-
-		}, 1L);
-	}
-
 	private void registerCommands() {
-		getCommand("addmap").setExecutor(new Addmap());
+		getCommand("addarena").setExecutor(new Addmap());
 		getCommand("addspawn").setExecutor(new Addspawn());
 		getCommand("vote").setExecutor(new Vote());
 		getCommand("editarena").setExecutor(new Editarena());
@@ -120,6 +108,8 @@ public class SG extends JavaPlugin {
 		getCommand("leave").setExecutor(new Leave());
 		getCommand("setlobby").setExecutor(new Lobby());
 		getCommand("tploc").setExecutor(new TPLoc());
+		getCommand("sg").setExecutor(new SGCommand());
+		getCommand("points").setExecutor(new Points());
 
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new OldCombat(), this);
@@ -196,7 +186,7 @@ public class SG extends JavaPlugin {
 					Bukkit.broadcastMessage(ChatColor.AQUA + "" + Gamer.getGamers().size() + "/24" + ChatColor.GREEN
 							+ " tributes waiting to play.");
 				}
-				if (pretime == 45 || pretime == 30 || pretime == 15 || (pretime > 0 && pretime <= 10)) {
+				if (pretime == 45 || pretime == 30 || pretime == 15 || (pretime >= 0 && pretime <= 10)) {
 					ChatUtil.broadcast("Game starting in " + pretime + " seconds.");
 				}
 				if (pretime == 0) {
@@ -216,22 +206,22 @@ public class SG extends JavaPlugin {
 
 			@Override
 			public void run() {
-				if (gametime < 15 && gametime > 5) {
+				if (gametime <= 15 && gametime > 5) {
 					ChatUtil.broadcast("&cStarting in &4&l" + countdown + " &r&cseconds!");
 					countdown--;
 				}
-				if (gametime == 15) {
+				if (gametime == 16) {
 					unregisterStartEvents();
 					registerGameEvents();
 					registerGraceEvents();
 					ChatUtil.broadcast("&b&lThe game has started!");
 					ChatUtil.broadcast("&eThere is a grace period for 15 seconds.");
 				}
-				if (gametime >= 20 && gametime < 25) {
+				if (gametime >= 21 && gametime < 26) {
 					ChatUtil.broadcast("&eGrace period ending in &6&l" + gracecountdown + " &r&eseconds!");
 					gracecountdown--;
 				}
-				if (gametime == 25) {
+				if (gametime == 27) {
 					unregisterGraceEvents();
 					ChatUtil.broadcast("&6Grace period is over! &lFight&r&6!");
 				}
@@ -339,13 +329,14 @@ public class SG extends JavaPlugin {
 			@Override
 			public void run() {
 				PointSystem.addPoints(p, 200);
+				for (Player pl : Bukkit.getOnlinePlayers()) {
+					pl.kickPlayer(ChatColor.translateAlternateColorCodes('&',
+							"&6&l" + p.getName() + " &r&6won!\n&cServer restarting."));
+				}
+				Bukkit.getServer().shutdown();
 			}
 
-		}, 20 * 5);
-		for (Player pl : Bukkit.getOnlinePlayers()) {
-			pl.kickPlayer(ChatColor.translateAlternateColorCodes('&',
-					"&6&l" + p.getName() + " &r&6won!\n&cServer restarting."));
-		}
-		Bukkit.getServer().shutdown();
+		}, 20 * 10);
+
 	}
 }

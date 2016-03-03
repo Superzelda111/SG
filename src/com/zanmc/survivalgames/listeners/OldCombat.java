@@ -9,6 +9,8 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import com.zanmc.survivalgames.handlers.PointSystem;
+
 public class OldCombat implements Listener {
 
 	@EventHandler
@@ -21,6 +23,8 @@ public class OldCombat implements Listener {
 	public void reEnableForCompat(PlayerQuitEvent event) {
 		event.getPlayer().getAttribute(Attribute.GENERIC_ATTACK_SPEED).removeModifier(
 				new AttributeModifier("AttackSpeedRemover", 1.0, AttributeModifier.Operation.ADD_NUMBER));
+
+		PointSystem.save(event.getPlayer());
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)

@@ -47,9 +47,18 @@ public class ChestHandler {
 		Random rnd = new Random();
 
 		for (int i = 0; i < rnd.nextInt(high - low) + low; i++) {
-			if (inv.contains(items.get(rnd.nextInt(items.size()))))
+			int rand = rnd.nextInt(items.size());
+			if (inv.contains(items.get(rand)))
 				continue;
-			inv.setItem(rnd.nextInt(27), items.get(rnd.nextInt(items.size())));
+			if(items.get(rand).getType() == Material.DIAMOND){
+				Random rnd2 = new Random();
+				if(rnd2.nextInt(4) == 4){
+					inv.setItem(rnd.nextInt(27), items.get(rand));
+				}
+			} else {
+				inv.setItem(rnd.nextInt(27), items.get(rand));
+			}
+			
 		}
 
 	}

@@ -1,6 +1,8 @@
 package com.zanmc.survivalgames.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -33,7 +35,9 @@ public class IngameListener implements Listener {
 
 		if (e.getDeathMessage().contains("hit the ground")) {
 			e.setDeathMessage(ChatUtil.prefix() + p.getName() + "&bfell to his death");
-			p.getWorld().strikeLightning(p.getLocation());
+			for (Player pl : Bukkit.getOnlinePlayers()) {
+				pl.playSound(p.getLocation(), Sound.ENTITY_LIGHTNING_THUNDER, 20, 1);
+			}
 			ChatUtil.broadcast("A tribute has fallen. " + Gamer.getAliveGamers().size() + "/" + Gamer.getGamers().size()
 					+ " tributes remain");
 		}
@@ -44,6 +48,7 @@ public class IngameListener implements Listener {
 			}
 		}
 		PointSystem.addPoints(p, 50);
+		PointSystem.save(p);
 	}
 
 	@EventHandler
@@ -52,10 +57,24 @@ public class IngameListener implements Listener {
 			Player p = (Player) e.getEntity();
 			Player d = (Player) e.getDamager();
 			if (p.getHealth() - e.getDamage() < 1) {
+				Gamer g = Gamer.getGamer(p);
+				g.setAlive(false);
+				p.setHealth(20);
+				p.setGameMode(GameMode.SPECTATOR);
+
 				ChatUtil.broadcast(p.getName() + " was killed by " + d.getName());
-				p.getWorld().strikeLightning(p.getLocation());
+				for (Player pl : Bukkit.getOnlinePlayers()) {
+					pl.playSound(p.getLocation(), Sound.ENTITY_LIGHTNING_THUNDER, 20, 1);
+				}
 				ChatUtil.broadcast("A tribute has fallen. " + Gamer.getAliveGamers().size() + "/"
 						+ Gamer.getGamers().size() + " tributes remain");
+
+				if (Gamer.getAliveGamers().size() == 1) {
+					for (Gamer ga : Gamer.getAliveGamers()) {
+						SG.win(ga.getPlayer());
+					}
+				}
+
 				PointSystem.addPoints(p, 50);
 				PointSystem.addPoints(d, 10);
 			}

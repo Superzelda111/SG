@@ -11,6 +11,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.zanmc.survivalgames.utils.LocUtil;
+
 public class Editarena implements CommandExecutor {
 	
 	@Override
@@ -51,12 +53,9 @@ public class Editarena implements CommandExecutor {
 			World world = wc.createWorld();
 			world.save();
 			
-			World w = Bukkit.getWorld("lobby");
-			double x = Bukkit.getWorld(args[0]).getSpawnLocation().getX();
-			double y = Bukkit.getWorld(args[0]).getSpawnLocation().getY()+1;
-			double z = Bukkit.getWorld(args[0]).getSpawnLocation().getZ();
-			p.teleport(new Location(w,x,y,z));
-			p.sendMessage(ChatColor.GREEN+"Saved arena '"+args[0]+"'");
+			LocUtil.teleportToLobby(p);
+			String msg = "&aSaved arena &f'&a"+args[0]+"&f'";
+			p.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
 			
 		}
 		
