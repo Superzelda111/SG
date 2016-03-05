@@ -30,6 +30,8 @@ import com.zanmc.survivalgames.handlers.Map;
 import com.zanmc.survivalgames.handlers.PointSystem;
 import com.zanmc.survivalgames.handlers.VoteHandler;
 
+import net.minecraft.server.v1_9_R1.MinecraftServer;
+
 public class JoinListener implements Listener {
 
 	@EventHandler
@@ -92,9 +94,11 @@ public class JoinListener implements Listener {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onMOTD(ServerListPingEvent e) {
-		e.setMotd("Lobby\nJoin");
+		e.setMotd(" "+ChatColor.translateAlternateColorCodes('&', SG.config.getString("settings.motd.lobby")));
+		MinecraftServer.getServer().setMotd(" "+ChatColor.translateAlternateColorCodes('&', SG.config.getString("settings.motd.lobby")));
 	}
 
 	@EventHandler

@@ -8,13 +8,18 @@ import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.zanmc.survivalgames.SG;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class ChestHandler {
+	
+	static ConsoleCommandSender clogger = SG.clogger;
 
 	static FileConfiguration data = SG.config;
 	static List<String> contents = data.getStringList("chests.contents");
@@ -23,8 +28,12 @@ public class ChestHandler {
 	private static void addItemsToList() {
 		for (String con : contents) {
 			String[] ncon = con.split(",");
-			ItemStack is = new ItemStack(Material.valueOf(ncon[0]), Integer.valueOf(ncon[1]));
-			items.add(is);
+			try {
+				ItemStack is = new ItemStack(Material.valueOf(ncon[0]), Integer.valueOf(ncon[1]));
+				items.add(is);
+			} catch(Exception e){
+				clogger.sendMessage(ChatColor.translateAlternateColorCodes('&', "&4String '"+ncon[0]+"' is not a material!"));
+			}
 		}
 	}
 

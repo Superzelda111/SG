@@ -2,12 +2,15 @@ package com.zanmc.survivalgames;
 
 import java.io.File;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -53,8 +56,13 @@ public class SG extends JavaPlugin {
 
 	public static SG pl;
 
+	public static Logger logger;
+	public static ConsoleCommandSender clogger;
+
 	@Override
 	public void onEnable() {
+		logger = getLogger();
+		clogger = getServer().getConsoleSender();
 		pl = this;
 		configs();
 		SettingsManager.getInstance().setup(this);
@@ -64,28 +72,33 @@ public class SG extends JavaPlugin {
 		dmtime = getConfig().getInt("settings.deathmatch") * 60;
 		data = SettingsManager.getInstance().getData();
 
+		clogger.sendMessage(ChatColor.RED + "---------------------------------------");
+		clogger.sendMessage(ChatColor.GREEN + "Enabling SurvivalGames by "
+				+ getDescription().getAuthors().toString().replace("[", "").replace("]", ""));
+		clogger.sendMessage(ChatColor.RED + "---------------------------------------");
+
 		if (data.getConfigurationSection("arenas") == null) {
-			System.out.println("No arenas created!");
+			clogger.sendMessage(ChatColor.translateAlternateColorCodes('&', "&4No arenas created!"));
 		} else {
+			clogger.sendMessage("Registered maps:");
 			for (String maps : data.getConfigurationSection("arenas").getKeys(false)) {
 				Map map = new Map(data.getString("arenas." + maps + ".name"), maps);
-				System.out.println("Registered maps:");
-				System.out.println(map.getMapName());
+				clogger.sendMessage(map.getMapName());
 				WorldCreator worldc = new WorldCreator(map.getFileName());
 				World world = worldc.createWorld();
-				System.out.println("World '" + world.getName() + "' imported");
+				logger.log(Level.INFO, "World '" + world.getName() + "' imported");
 			}
 			Random rand = new Random();
 
 			if (Map.getAllMaps().size() >= 6) {
-				System.out.println("Size is bigger than 6");
+				clogger.sendMessage("Size is bigger than 6");
 				for (int i = 0; i < 6; i++) {
 					Map map = Map.getAllMaps().get(rand.nextInt(Map.getAllMaps().size()));
 					Map.setTempId(map, i + 1);
 					Map.setVoteMaps();
 				}
 			} else {
-				System.out.println("Size: " + Map.getAllMaps().size());
+				clogger.sendMessage(ChatColor.translateAlternateColorCodes('&', "&eSize: " + Map.getAllMaps().size()));
 				for (int i = 0; i < Map.getAllMaps().size(); i++) {
 					Map map = Map.getAllMaps().get(i);
 					Map.setTempId(map, i + 1);
@@ -247,6 +260,7 @@ public class SG extends JavaPlugin {
 						System.out.println("Players: " + pla.getName());
 						LocUtil.teleportToGame(p, i);
 						p.setGameMode(GameMode.ADVENTURE);
+						i++;
 					}
 				}
 
