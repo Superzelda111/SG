@@ -26,7 +26,6 @@ public class Addmap implements CommandExecutor {
 				Map map = new Map(args[1], args[0]);
 				sender.sendMessage("Map created: " + map.getMapName());
 			}
-
 		} else {
 			sender.sendMessage(ChatColor.RED + "No permission");
 			return true;

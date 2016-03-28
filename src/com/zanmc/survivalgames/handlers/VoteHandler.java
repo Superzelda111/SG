@@ -7,7 +7,7 @@ public class VoteHandler {
 	private static HashMap<String, Map> votes = new HashMap<String, Map>();
 
 	public static void vote(String uname, Map mapp) {
-		if(!hasVoted(uname)){
+		if (!hasVoted(uname)) {
 			votes.put(uname, mapp);
 			System.out.println("User put in hashmap");
 		} else {
@@ -22,12 +22,12 @@ public class VoteHandler {
 	public static Map getVotedMap(String p) {
 		return votes.get(p);
 	}
-	
+
 	public static int getVotesMap(Map map) {
 		int out = 0;
-		for(String pl : votes.keySet()) {
+		for (String pl : votes.keySet()) {
 			Map vote = votes.get(pl);
-			if(vote == map) {
+			if (vote == map) {
 				out++;
 			}
 		}

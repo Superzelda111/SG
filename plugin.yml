@@ -16,6 +16,8 @@ commands:
     permission: sg.admin
   fstart:
     permission: sg.admin
+  forcedm:
+    permission: sg.admin
   join:
   leave:
   setlobby:

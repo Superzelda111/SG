@@ -1,19 +1,32 @@
 settings:
+  # DO NOT TOUCH
+  lastmap: 
+  # Time until start(minutes)
   pretime: 5
+  # Time until deathmatch(minutes)
   deathmatch: 30
+  # Dont touch this
   rewriteconfig: false
-  chat:
+  # Bungeecord
+  bungeecord: true
+  # If bungeecord, server to move them to
+  lobbyserver: lobby
+  chat: # Chat format: %points %name %msg
     format: '<&a[&b%points&a]&r%name> %msg'
-  motd:
+  motd: # Set the MOTD here, colour codes do work
     lobby: " Lobby %newline% Join "
     ingame: " Ingame %newline% Full"
-lobby:
+lobby: # Lobby spawn location. Setup with /tploc <world> <x> <y> <z> then /setlobby
   world: world
   x: 0.5
   y: 1.0
   z: 0.5
   pitch: 0
   yaw: 0
+  # Chests
+  # Add ITEM IDS to this list, followed by the amount.
+  # These items will randomly spawn in chests around the arena
+  # Item ID List: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
 chests:
   contents: 
   - APPLE,3
@@ -39,3 +52,11 @@ points:
   win: 100
   lose: 20
   kill: 10
+mysql: # Enable for stats
+  enabled: false
+  host: localhost
+  port: 3306
+  username: root
+  password: password
+  database: database
+  table: sg_stats

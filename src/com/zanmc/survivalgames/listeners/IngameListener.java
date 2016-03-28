@@ -2,6 +2,7 @@ package com.zanmc.survivalgames.listeners;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -48,6 +49,11 @@ public class IngameListener implements Listener {
 			}
 		}
 		PointSystem.addPoints(p, 50);
+		if (SG.config.getBoolean("mysql.enabled")) {
+			if (SG.playerDataContains(p.getUniqueId().toString())) {
+				g.addDeath();
+			}
+		}
 		PointSystem.save(p);
 	}
 
@@ -75,16 +81,27 @@ public class IngameListener implements Listener {
 					}
 				}
 
-				PointSystem.addPoints(p, 50);
-				PointSystem.addPoints(d, 10);
+				PointSystem.addPoints(p, SG.config.getInt("points.lose"));
+				PointSystem.addPoints(d, SG.config.getInt("points.kill"));
+				if (SG.config.getBoolean("mysql.enabled"))
+					Gamer.getGamer(d).addKill();
 			}
 		}
 	}
 
 	@EventHandler
 	public void onBreak(BlockBreakEvent event) {
-		if (event.getPlayer().getGameMode() == GameMode.SURVIVAL)
+		if (event.getPlayer().getGameMode() != GameMode.SURVIVAL)
+			return;
+		if (event.getBlock().getType() == Material.LEAVES) {
 			event.setCancelled(true);
+		}
+		if (event.getBlock().getType() == Material.GLASS) {
+			event.setCancelled(true);
+		}
+		if (event.getBlock().getType() == Material.THIN_GLASS) {
+			event.setCancelled(true);
+		}
 	}
 
 }

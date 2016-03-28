@@ -1,7 +1,5 @@
 package com.zanmc.survivalgames.listeners;
 
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -11,14 +9,11 @@ import org.bukkit.event.server.ServerListPingEvent;
 
 public class StartListener implements Listener {
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler
 	public void onMove(PlayerMoveEvent e) {
-		Player player = e.getPlayer();
-		Location from = e.getFrom();
-
-		if (from.getZ() != e.getTo().getZ() && from.getX() != e.getTo().getX()) {
-			player.teleport(e.getFrom());
-		}
+		if (e.getTo().getX() == e.getFrom().getX() && e.getTo().getZ() == e.getFrom().getZ())
+			return;
+		e.getPlayer().teleport(e.getFrom());
 	}
 
 	@EventHandler

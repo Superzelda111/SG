@@ -1,5 +1,8 @@
 package com.zanmc.survivalgames.handlers;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -9,9 +12,10 @@ import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 import com.zanmc.survivalgames.GameState;
+import com.zanmc.survivalgames.SG;
 
 public class Gamer {
-	
+
 	private String name;
 	private UUID uuid;
 	private boolean alive = false;
@@ -85,6 +89,39 @@ public class Gamer {
 				alive.add(g);
 		return alive;
 	}
-	
+
+	private static Connection connection = SG.connection;
+
+	public void addWin() {
+		try {
+			PreparedStatement sql = connection.prepareStatement("update ? set wins=wins+1 where uuid=?");
+			sql.setString(1, SG.config.getString("mysql.table"));
+			sql.setString(2, uuid.toString());
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void addKill() {
+		try {
+			PreparedStatement sql = connection.prepareStatement("update ? set kills=kills+1 where uuid=?");
+			sql.setString(1, SG.config.getString("mysql.table"));
+			sql.setString(2, uuid.toString());
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void addDeath() {
+		try {
+			PreparedStatement sql = connection.prepareStatement("update ? set deaths=deaths+1 where uuid=?");
+			sql.setString(1, SG.config.getString("mysql.table"));
+			sql.setString(2, uuid.toString());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 }

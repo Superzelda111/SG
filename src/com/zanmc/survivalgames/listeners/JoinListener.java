@@ -30,8 +30,6 @@ import com.zanmc.survivalgames.handlers.Map;
 import com.zanmc.survivalgames.handlers.PointSystem;
 import com.zanmc.survivalgames.handlers.VoteHandler;
 
-import net.minecraft.server.v1_9_R1.MinecraftServer;
-
 public class JoinListener implements Listener {
 
 	@EventHandler
@@ -75,8 +73,6 @@ public class JoinListener implements Listener {
 		if (p.hasPermission("sg.admin")) {
 			p.sendMessage("Joined as admin. Type /join to join the game");
 		} else {
-			Gamer g = Gamer.getGamer(p);
-			System.out.println("Added " + g.getName() + " to gamers.");
 			p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&aVote: &8[&b/sg vote 1-6&8]"));
 
 			for (Map map : Map.getVoteMaps()) {
@@ -87,18 +83,11 @@ public class JoinListener implements Listener {
 			p.sendMessage(ChatColor.AQUA + "" + Gamer.getGamers().size() + "/24" + ChatColor.GREEN
 					+ " tributes waiting to play.");
 		}
-
-		// new Title(((CraftPlayer) p).getHandle(), "&6Welcome to SG!", "&aDo
-		// &f/vote &ato vote for your map!", 20, 40,
-		// 20);
-
 	}
 
-	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onMOTD(ServerListPingEvent e) {
-		e.setMotd(" "+ChatColor.translateAlternateColorCodes('&', SG.config.getString("settings.motd.lobby")));
-		MinecraftServer.getServer().setMotd(" "+ChatColor.translateAlternateColorCodes('&', SG.config.getString("settings.motd.lobby")));
+		e.setMotd(" " + ChatColor.translateAlternateColorCodes('&', SG.config.getString("settings.motd.lobby")));
 	}
 
 	@EventHandler
@@ -140,5 +129,4 @@ public class JoinListener implements Listener {
 		if (event.getPlayer().getGameMode() == GameMode.SURVIVAL)
 			event.setCancelled(true);
 	}
-
 }

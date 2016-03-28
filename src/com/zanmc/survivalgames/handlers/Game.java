@@ -37,6 +37,7 @@ public class Game {
 			SG.unRegisterPreEvents();
 			SG.registerStartEvents();
 			Map.setActiveMap(VoteHandler.getWithMostVotes());
+			SG.config.set("lastmap", Map.getActiveMap().getFileName());
 			System.out.println("Active Map: " + Map.getActiveMap().getMapName());
 			hasStarted = true;
 			GameState.setState(GameState.INGAME);
@@ -55,7 +56,7 @@ public class Game {
 				SG.clearPlayer(p);
 				participants.add(p);
 				LocUtil.teleportToGame(p, i);
-				p.setGameMode(GameMode.ADVENTURE);
+				p.setGameMode(GameMode.SURVIVAL);
 				ChatUtil.sendMessage(p, "The game has started! You have been given the ability: "); // TODO:
 																									// Abilities
 				i++;
@@ -68,15 +69,6 @@ public class Game {
 			Bukkit.getScheduler().cancelTask(SG.PreGamePID);
 			SG.startPreGameCountdown();
 		}
-
-		/*
-		 * for(Player p : Bukkit.getOnlinePlayers()){ if(i <
-		 * Bukkit.getOnlinePlayers().size() / 2){
-		 * Team.addToTeam(TeamType.TEAMONE, p); } else {
-		 * Team.addToTeam(TeamType.TEAMTWO, p); } i++; ChatUtil.sendMessage(p,
-		 * "The game has started! You have been given the ability: "); // TODO:
-		 * Abilities }
-		 */
 	}
 
 	public static void stop() {
